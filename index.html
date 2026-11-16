@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .main {
+            max-width: 40%;
+        }
+        .main > h1 {
+            font-size: 42px;
+            color: rgb(227, 144, 20);
+            text-align: center;
+            padding-bottom: 30px;
+        }
+        .main button {
+            border: 0;
+            outline: 0;
+        }
+
+        .cont {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .cont :nth-child(1) {
+            padding: 10px 30px;
+            border-radius: 12px;
+            font-size: 22px;
+            background-color:  rgb(11, 62, 120);
+            color: #fff;
+        }
+
+        .cont :nth-child(2) {
+            padding: 10px 30px;
+            border-radius: 12px;
+            font-size: 22px;
+            background-color: rgb(191, 191, 55);
+        }
+
+        .update {
+            padding-top: 40px;
+            text-align: center;
+        }
+
+        .update :nth-child(1) {
+            padding: 10px 30px;
+            border-radius: 12px;
+            font-size: 22px;
+            background-color: rgb(167, 48, 15);
+            color: #fff;
+        }
+        .update :nth-child(1).active {
+            padding: 10px 30px;
+            border-radius: 12px;
+            font-size: 22px;
+            background-color:  rgb(59, 175, 113);
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main">
+        <h1>Click Game</h1>
+        <div class="cont">
+            <button id="score"></button>
+            <button id="big">Clickme</button>
+        </div>
+        <div class="update">
+            <button disabled id="upgrade">Upgrade</button>
+        </div>
+    </div>
+    <script src="assets/app.js"></script>
+</body>
+
+</html>
