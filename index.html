@@ -6,73 +6,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
-        .main {
-            max-width: 40%;
-        }
-        .main > h1 {
-            font-size: 42px;
-            color: rgb(227, 144, 20);
-            text-align: center;
-            padding-bottom: 30px;
-        }
-        .main button {
-            border: 0;
-            outline: 0;
+        #bar {
+            height: 10px;
+            width: 0;
+            border-radius: 5px;
+            transition: width .2s;
         }
 
-        .cont {
-            display: flex;
-            justify-content: space-between;
+        #bar[data-level="none"] {
+            width: 0;
         }
 
-        .cont :nth-child(1) {
-            padding: 10px 30px;
-            border-radius: 12px;
-            font-size: 22px;
-            background-color:  rgb(11, 62, 120);
-            color: #fff;
+        #bar[data-level="weak"] {
+            width: 25%;
+            background: #e53935;
         }
 
-        .cont :nth-child(2) {
-            padding: 10px 30px;
-            border-radius: 12px;
-            font-size: 22px;
-            background-color: rgb(191, 191, 55);
+        #bar[data-level="fair"] {
+            width: 50%;
+            background: #fb8c00;
         }
 
-        .update {
-            padding-top: 40px;
-            text-align: center;
+        #bar[data-level="good"] {
+            width: 75%;
+            background: #fdd835;
         }
 
-        .update :nth-child(1) {
-            padding: 10px 30px;
-            border-radius: 12px;
-            font-size: 22px;
-            background-color: rgb(167, 48, 15);
-            color: #fff;
+        #bar[data-level="strong"] {
+            width: 100%;
+            background: #43a047;
         }
-        .update :nth-child(1).active {
-            padding: 10px 30px;
-            border-radius: 12px;
-            font-size: 22px;
-            background-color:  rgb(59, 175, 113);
-            color: #fff;
+
+        .met {
+            color: green;
         }
     </style>
 </head>
 
 <body>
-    <div class="main">
-        <h1>Click Game</h1>
-        <div class="cont">
-            <button id="score"></button>
-            <button id="big">Clickme</button>
-        </div>
-        <div class="update">
-            <button disabled id="upgrade">Upgrade</button>
-        </div>
-    </div>
+    <input id="pw" type="password"> <button id="toggle">Show</button>
+    <div id="bar" data-level="none"></div>
+    <p id="label"></p>
+    <ul id="checks"></ul>
     <script src="assets/app.js"></script>
 </body>
 

@@ -30,67 +30,185 @@
 
 //get score 
 
-let score = document.querySelector("#score")
+// let score = document.querySelector("#score")
 
-// get click button
+// // get click button
 
-let big = document.querySelector("#big")
+// let big = document.querySelector("#big")
 
-// get upgrade button
+// // get upgrade button
 
-let upgrade = document.querySelector("#upgrade")
+// let upgrade = document.querySelector("#upgrade")
 
-score.textContent = 0;
-
-
-//set initial 
+// score.textContent = 0;
 
 
+// //set initial 
 
-let updated = 0;
 
-//set power
 
-let power = 1
+// let updated = 0;
 
-//set buy status
+// //set power
 
-let buy = false
+// let power = 1
 
-//event setting for click to update Score
+// //set buy status
 
-big.addEventListener("click", () => {
-    console.log("working")
+// let buy = false
 
-    updated = updated + power;
-    score.textContent = `${updated}`;
-    console.log("condition", updated === 10)
-    if (updated >= 10) {
-        console.log("consition working")
-        if(!buy){
-            upgrade.disabled = false
-            // add class
-            upgrade.classList.add("active")
+// //event setting for click to update Score
+
+// big.addEventListener("click", () => {
+//     console.log("working")
+
+//     updated = updated + power;
+//     score.textContent = `${updated}`;
+//     console.log("condition", updated === 10)
+//     if (updated >= 10) {
+//         console.log("consition working")
+//         if(!buy){
+//             upgrade.disabled = false
+//             // add class
+//             upgrade.classList.add("active")
+//         }
+//     }
+
+
+// })
+
+// //
+// upgrade.addEventListener("click", () => {
+//     console.log("upgrade starts")
+//     console.log(upgrade.ariaDisabled)
+//     power = 2
+//     // diable the upgrade again
+//     upgrade.disabled = true
+//     // remove the active class
+//     upgrade.classList.remove("active")
+//     //change text
+//     upgrade.textContent = "Owned"
+//     //update buy status
+//     buy = true
+// })
+
+
+//===========================================================================================================
+
+
+
+// Build 2: Password Strength Meter (about 60 to 75 minutes)
+
+// A text box. As you type, a colored bar and a label show the strength,
+//  and a checklist ticks off rules live. A Show/Hide button reveals the password.
+
+
+// The rules (the checks)
+// At least 8 characters
+// Contains a number
+// Contains an uppercase letter
+// Contains a symbol (anything that isn’t a letter or number)
+
+// Levels: empty text → none, then weak, fair, good, strong, based on how many checks pass.
+
+
+// Think first (fill in the right column, then compare with what your code does)
+// Password	                                  How many checks pass?	                       What level should it be?
+// "" (empty)		                              none                                              none
+// abc	                                          none                                             none
+// abcdefgh		                                   one                                             weak
+// abcdefg1		                                   two                                              fair
+// Abcdefg1		                                   three                                             good
+// Abcdef1!		                                    four                                             strong
+// A1!		read this one carefully                 three                                            length
+// ········ (8 spaces)		                        none                                             none
+
+
+// -----------------------------------------------------------------------------------------------------------------
+
+// *****************Stages***********************
+
+// Stage 1: The logic, without any page. Write getStrength(password) that returns an object,
+//  at least { level, checks }, where checks records which of the four rules passed. 
+// It touches nothing on the page. Test it only in the console with the paste-ready
+//  lines below. Logic you can test without a browser is the habit professionals build,
+//  and it’s why this stage comes first.
+
+
+const getStrength = (password) => {
+    let checks = [];
+    let level = 0;
+    const lower = "abcdefghijklmnopqrstuvwxyz";
+    const upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    const numbers = "0123456789"
+    //check type
+    if (typeof (password) !== "string") return { level: "none", checks }
+    //Check minimum Length
+    if (password.length >= 8) {
+        checks.push("length");
+        level = ++level;
+    }
+    const p = [...password]
+    // check Uppercase
+    if (p.some(elem => upper.includes(elem))) {
+        checks.push("uppercase");
+        level = ++level;
+    }
+    // check number
+    if (p.some(elem => numbers.includes(elem))) {
+        checks.push("number");
+        level = ++level;
+    }
+    // 
+    if (p.some(elem => ( ((!numbers.includes(elem)) && elem.trim() !== "") && (!(upper.includes(elem)) && !(lower.includes(elem)))))) {
+        checks.push("symbol");
+        level = ++level;
+    }
+    
+    switch (level) {
+        case 1:
+            level = "weak";
+            break
+        case 2:
+            level = "fair";
+            break
+        case 3:
+            level = "good";
+            break
+        case 4:
+            level = "strong";
+            break
+            default:
+                level = "none"
+            }
+
+    //cap if length not met
+    if (password.length < 8) {
+        console.log("debug-->")
+        return {
+            level: "none",
+            checks
+        }
+    } else {
+        return {
+            level, checks
         }
     }
 
+}
 
-})
 
-//
-upgrade.addEventListener("click", () => {
-    console.log("upgrade starts")
-    console.log(upgrade.ariaDisabled)
-    power = 2
-    // diable the upgrade again
-    upgrade.disabled = true
-    // remove the active class
-    upgrade.classList.remove("active")
-    //change text
-    upgrade.textContent = "Owned"
-    //update buy status
-    buy = true
-})
+// console.log(getStrength("").level);              // "none"
+// console.log(getStrength("abc").level);           // "weak"
+// console.log(getStrength("abcdefgh").level);      // "weak"   (yours: "fair")
+// console.log(getStrength("abcdefg1").level);      // "fair"   (yours: "good")
+// console.log(getStrength("Abcdefg1").level);      // "good"   (yours: "none")
+// console.log(getStrength("Abcdef1!").level);      // "strong" (yours: "none")
+// console.log(getStrength("A1!"));           // "weak"   (yours: "good", the rule from point 4)
+// console.log(getStrength("        "));      // "weak"   (yours: "fair")
+// console.log(getStrength("abcdefghi").checks);    // ["length"]  (yours: ["symbol"])
+// console.log(getStrength("Abcdefghijk1!").level); // "strong" (yours: "none", length is not exactly 8)
+// console.log(getStrength(5).level);               // your decision, but not undefined
 
 
 
