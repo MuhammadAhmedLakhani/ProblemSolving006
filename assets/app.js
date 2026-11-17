@@ -86,12 +86,11 @@ upgrade.addEventListener("click", () => {
     upgrade.disabled = true
     // remove the active class
     upgrade.classList.remove("active")
-    //update but status
+    //change text
+    upgrade.textContent = "Owned"
+    //update buy status
     buy = true
 })
-
-
-
 
 
 
