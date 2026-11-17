@@ -164,7 +164,7 @@
 //         checks.push("symbol");
 //         level = ++level;
 //     }
-    
+
 //     switch (level) {
 //         case 1:
 //             level = "weak";
@@ -215,33 +215,69 @@
 
 
 const getStrength = (password) => {
-  const empty = { length: false, uppercase: false, number: false, symbol: false };
+    const empty = { length: false, uppercase: false, number: false, symbol: false };
 
-  if (typeof password !== "string" || password === "") {
-    return { level: "none", checks: empty };
-  }
+    if (typeof password !== "string" || password === "") {
+        return { level: "none", checks: empty };
+    }
 
-  const digits = "0123456789";
-  const chars = [...password];
-  const isLetter = (c) => c.toLowerCase() !== c.toUpperCase();
+    const digits = "0123456789";
+    const chars = [...password];
+    const isLetter = (c) => c.toLowerCase() !== c.toUpperCase();
 
-  const checks = {
-    length: password.length >= 8,
-    uppercase: chars.some((c) => c !== c.toLowerCase()),
-    number: chars.some((c) => digits.includes(c)),
-    symbol: chars.some((c) => !isLetter(c) && !digits.includes(c) && c.trim() !== ""),
-  };
+    const checks = {
+        length: password.length >= 8,
+        uppercase: chars.some((c) => c !== c.toLowerCase()),
+        number: chars.some((c) => digits.includes(c)),
+        symbol: chars.some((c) => !isLetter(c) && !digits.includes(c) && c.trim() !== ""),
+    };
 
-  const score = Object.values(checks).filter((passed) => passed).length;
-  const levels = ["weak", "weak", "fair", "good", "strong"];
+    const score = Object.values(checks).filter((passed) => passed).length;
+    const levels = ["weak", "weak", "fair", "good", "strong"];
 
-  let level = levels[score];
-  if (!checks.length) level = "weak";   // too short: never better than weak
+    let level = levels[score];
+    if (!checks.length) level = "weak";   // too short: never better than weak
 
-  return { level, checks };
+    return { level, checks };
 };
 
 
 
+// ******************************** Stage 2 ***************************************************
 
+// Stage 2: wire it to the page
+
+// The goal is that whatever the user types, #label shows the level.
+
+// Think first. Fill in your own answers:
+
+// Moment	                                                       What should #label show?
+// Page just loaded, nothing typed	                              nothing            
+// User has typed abc	                                          weak
+// User has typed Abcdef1!	                                      strong
+// User deleted everything	                                      nothing     
+
+// Steps:
+
+// Select #pw and #label.
+
+const pw = document.querySelector("#pw");
+console.log("check", pw.value)
+const label = document.querySelector("#label");
+
+// Add an input listener on #pw.
+// Inside it, read the text from the event (event.target.value), call getStrength,
+//  and put the level in #label with textContent.
+
+const update = () => {
+    label.textContent = getStrength(pw.value).level
+
+}
+
+pw.addEventListener("input", update)
+
+
+update()
+// Make the page correct before anyone types.
+// Remember what happened in the Clicker  Game when the display wasn’t drawn on load.
 
