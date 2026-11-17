@@ -135,67 +135,67 @@
 //  and it’s why this stage comes first.
 
 
-const getStrength = (password) => {
-    let checks = [];
-    let level = 0;
-    const lower = "abcdefghijklmnopqrstuvwxyz";
-    const upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    const numbers = "0123456789"
-    //check type
-    if (typeof (password) !== "string") return { level: "none", checks }
-    //Check minimum Length
-    if (password.length >= 8) {
-        checks.push("length");
-        level = ++level;
-    }
-    const p = [...password]
-    // check Uppercase
-    if (p.some(elem => upper.includes(elem))) {
-        checks.push("uppercase");
-        level = ++level;
-    }
-    // check number
-    if (p.some(elem => numbers.includes(elem))) {
-        checks.push("number");
-        level = ++level;
-    }
-    // 
-    if (p.some(elem => ( ((!numbers.includes(elem)) && elem.trim() !== "") && (!(upper.includes(elem)) && !(lower.includes(elem)))))) {
-        checks.push("symbol");
-        level = ++level;
-    }
+// const getStrength = (password) => {
+//     let checks = [];
+//     let level = 0;
+//     const lower = "abcdefghijklmnopqrstuvwxyz";
+//     const upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+//     const numbers = "0123456789"
+//     //check type
+//     if (typeof (password) !== "string") return { level: "none", checks }
+//     //Check minimum Length
+//     if (password.length >= 8) {
+//         checks.push("length");
+//         level = ++level;
+//     }
+//     const p = [...password]
+//     // check Uppercase
+//     if (p.some(elem => upper.includes(elem))) {
+//         checks.push("uppercase");
+//         level = ++level;
+//     }
+//     // check number
+//     if (p.some(elem => numbers.includes(elem))) {
+//         checks.push("number");
+//         level = ++level;
+//     }
+//     // 
+//     if (p.some(elem => ( ((!numbers.includes(elem)) && elem.trim() !== "") && (!(upper.includes(elem)) && !(lower.includes(elem)))))) {
+//         checks.push("symbol");
+//         level = ++level;
+//     }
     
-    switch (level) {
-        case 1:
-            level = "weak";
-            break
-        case 2:
-            level = "fair";
-            break
-        case 3:
-            level = "good";
-            break
-        case 4:
-            level = "strong";
-            break
-            default:
-                level = "none"
-            }
+//     switch (level) {
+//         case 1:
+//             level = "weak";
+//             break
+//         case 2:
+//             level = "fair";
+//             break
+//         case 3:
+//             level = "good";
+//             break
+//         case 4:
+//             level = "strong";
+//             break
+//             default:
+//                 level = "none"
+//             }
 
-    //cap if length not met
-    if (password.length < 8) {
-        console.log("debug-->")
-        return {
-            level: "none",
-            checks
-        }
-    } else {
-        return {
-            level, checks
-        }
-    }
+//     //cap if length not met
+//     if (password.length < 8) {
+//         console.log("debug-->")
+//         return {
+//             level: "none",
+//             checks
+//         }
+//     } else {
+//         return {
+//             level, checks
+//         }
+//     }
 
-}
+// }
 
 
 // console.log(getStrength("").level);              // "none"
@@ -211,7 +211,35 @@ const getStrength = (password) => {
 // console.log(getStrength(5).level);               // your decision, but not undefined
 
 
+// ========================= claude version ======================================
 
+
+const getStrength = (password) => {
+  const empty = { length: false, uppercase: false, number: false, symbol: false };
+
+  if (typeof password !== "string" || password === "") {
+    return { level: "none", checks: empty };
+  }
+
+  const digits = "0123456789";
+  const chars = [...password];
+  const isLetter = (c) => c.toLowerCase() !== c.toUpperCase();
+
+  const checks = {
+    length: password.length >= 8,
+    uppercase: chars.some((c) => c !== c.toLowerCase()),
+    number: chars.some((c) => digits.includes(c)),
+    symbol: chars.some((c) => !isLetter(c) && !digits.includes(c) && c.trim() !== ""),
+  };
+
+  const score = Object.values(checks).filter((passed) => passed).length;
+  const levels = ["weak", "weak", "fair", "good", "strong"];
+
+  let level = levels[score];
+  if (!checks.length) level = "weak";   // too short: never better than weak
+
+  return { level, checks };
+};
 
 
 
