@@ -217,7 +217,7 @@
 const getStrength = (password) => {
     const empty = { length: false, uppercase: false, number: false, symbol: false };
 
-    if (typeof password !== "string" || password === "") {
+    if (typeof password !== "string" || password.trim() === "") {
         return { level: "none", checks: empty };
     }
 
@@ -262,16 +262,18 @@ const getStrength = (password) => {
 // Select #pw and #label.
 
 const pw = document.querySelector("#pw");
-console.log("check", pw.value)
 const label = document.querySelector("#label");
+const bar = document.querySelector("#bar");
 
 // Add an input listener on #pw.
 // Inside it, read the text from the event (event.target.value), call getStrength,
 //  and put the level in #label with textContent.
 
 const update = () => {
-    label.textContent = getStrength(pw.value).level
-
+    let level = getStrength(pw.value).level
+    console.log(level)
+    label.textContent  = level;
+    bar.dataset.level = level;
 }
 
 pw.addEventListener("input", update)
