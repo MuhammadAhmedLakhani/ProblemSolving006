@@ -264,22 +264,78 @@ const getStrength = (password) => {
 const pw = document.querySelector("#pw");
 const label = document.querySelector("#label");
 const bar = document.querySelector("#bar");
+// checks
+const checks = document.querySelector("#checks");
 
 // Add an input listener on #pw.
 // Inside it, read the text from the event (event.target.value), call getStrength,
 //  and put the level in #label with textContent.
 
+// Stage 3: the colored bar
+// keystroke, only your length cap in getStrength changes.
+
+// What to do:
+
+// Add <div id="bar" data-level="none"></div> and the CSS from the Build 2 setup, if you haven’t already.
+// Select #bar.
+// Inside update (the same function, so the page stays in sync with itself), set the bar’s data-level to the level that getStrength returned.
+
+// const update = () => {
+//     let level = getStrength(pw.value).level
+//     console.log(level)
+//     label.textContent  = level;
+//     bar.dataset.level = level;
+// }
+
+// pw.addEventListener("input", update)
+
+
+// update()
+// Make the page correct before anyone types.
+// Remember what happened in the Clicker  Game when the display wasn’t drawn on load.
+
+// Stage 4: the live checklist (read it now, build it after Stage 3 works)
+
+// Rules as data. 
+// 1:There are four rules (length, uppercase, number, symbol),
+//  and each needs a readable sentence for the page. Would you write the four 
+// li elements out by hand, or keep the rules in an array of objects and build
+//  the list from it with a loop? Which one makes it easy to add a fifth rule later?
+
+//2:Build once, update many times. The four li elements should be created once,
+//  at the start. On each keystroke, update only changes what they show.
+//  What goes wrong if update rebuilds the list every time? (Think about what you proved in the render twice test.)
+
+
+//setting up chcklists
+
+ let val = Object.values(getStrength(""))[1]
+ let checksPoints =  Object.entries(val);
+checksPoints.forEach(elem => {
+    let li = document.createElement("li");
+    li.classList.add("description");
+    checks.append(li);
+    li.textContent = `Password  ${elem[0]} status is ${elem[1]}`
+});
+
+
+//description
+
+let description = document.querySelectorAll(".description")
+
+// console.log("checks-->",description)
+
 const update = () => {
-    let level = getStrength(pw.value).level
-    console.log(level)
-    label.textContent  = level;
+    let level = getStrength(pw.value).level;
+    let checkStatus = Object.entries(getStrength(pw.value).checks);
+    console.log(getStrength(pw.value).checks)
+    label.textContent = level;
+    //updating bar style attribute
     bar.dataset.level = level;
+
+    // Updating the check status on DOM
+    description.forEach((elem,i) => elem.textContent = `Password ${checkStatus[i][0]} status is ${checkStatus[i][1]}`)
 }
 
 pw.addEventListener("input", update)
-
-
-update()
-// Make the page correct before anyone types.
-// Remember what happened in the Clicker  Game when the display wasn’t drawn on load.
 
