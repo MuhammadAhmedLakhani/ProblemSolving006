@@ -281,11 +281,11 @@ const checks = document.querySelector("#checks");
 // Inside update (the same function, so the page stays in sync with itself), set the bar’s data-level to the level that getStrength returned.
 
 // const update = () => {
-//     let level = getStrength(pw.value).level
-//     console.log(level)
-//     label.textContent  = level;
-//     bar.dataset.level = level;
-// }
+    //     let level = getStrength(pw.value).level
+    //     console.log(level)
+    //     label.textContent  = level;
+    //     bar.dataset.level = level;
+    // }
 
 // pw.addEventListener("input", update)
 
@@ -310,9 +310,9 @@ const checks = document.querySelector("#checks");
 //setting up chcklists
 
 const rules = [
-  { key: "length",    text: "At least 8 characters" },
-  { key: "uppercase", text: "An uppercase letter" },
-  { key: "number",    text: "A number" },
+    { key: "length",    text: "At least 8 characters" },
+    { key: "uppercase", text: "An uppercase letter" },
+    { key: "number",    text: "A number" },
   { key: "symbol",    text: "A symbol" },
 ];
 rules.forEach(elem => {
@@ -330,26 +330,51 @@ let description = document.querySelectorAll(".description")
 // console.log("checks-->",description)
 
 const update = () => {
-
+    
     let level = getStrength(pw.value).level;
     let checkStatus = getStrength(pw.value).checks;
     // updating label   
     label.textContent = level;
     //updating bar style attribute
     bar.dataset.level = level;
-
+    
     // Updating the check status on DOM
     description.forEach((elem,i) =>{  
         //check status updation
         elem.textContent = `${rules[i].text} --> ${checkStatus[rules[i].key]?"✅":"❌"}` 
         //update class .met
-
+        
         // checkStatus[rules[i].key] === true ?elem.classList.add("met"):elem.classList.remove("met") 
-     
+        
         elem.classList.toggle("met",checkStatus[rules[i].key] === true);
         
     })
 }
+
+// show/hide functionality
+
+
+const toggle = document.querySelector("#toggle");
+
+// setting toggle status
+let toggleStatus = false;
+const toggleAppearance = () => {
+    //Fliping the last value
+    toggleStatus = !toggleStatus;
+
+    toggleStatus === true?pw.type = "text":pw.type = "password";
+    
+    //update the toggle  text 
+    toggleStatus === true?toggle.textContent = "Hide":toggle.textContent = "Show";
+    
+}
+
+
+// toggle clcil event setup
+
+toggle.addEventListener("click",toggleAppearance)
+
+
 
 update()
 pw.addEventListener("input", update)
