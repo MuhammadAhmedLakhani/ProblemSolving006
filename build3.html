@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Theme</title>
+    <style>
+        :root {
+            --bg: #ffffff;
+            --text: #1a1a1a;
+            --card: #f2f2f2;
+            color-scheme: light;
+        }
+
+        :root[data-theme="dark"] {
+            --bg: #121212;
+            --text: #eaeaea;
+            --card: #1f1f1f;
+            color-scheme: dark;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: system-ui, sans-serif;
+            margin: 2rem;
+        }
+
+        .card {
+            background: var(--card);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+
+        [aria-pressed="true"] {
+            outline: 2px solid currentColor;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Theme</h1>
+    <div id="choice">
+        <button data-choice="light">Light</button>
+        <button data-choice="dark">Dark</button>
+        <button data-choice="system">System</button>
+    </div>
+    <p id="status"></p>
+    <div class="card"><input placeholder="A form control">
+        <p>Some text on a card.</p>
+    </div>
+
+
+    <script src="assets/build3.js" defer></script>
+</body>
+
+</html>
