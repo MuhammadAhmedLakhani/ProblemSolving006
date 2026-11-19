@@ -309,13 +309,17 @@ const checks = document.querySelector("#checks");
 
 //setting up chcklists
 
- let val = Object.values(getStrength(""))[1]
- let checksPoints =  Object.entries(val);
-checksPoints.forEach(elem => {
+const rules = [
+  { key: "length",    text: "At least 8 characters" },
+  { key: "uppercase", text: "An uppercase letter" },
+  { key: "number",    text: "A number" },
+  { key: "symbol",    text: "A symbol" },
+];
+rules.forEach(elem => {
     let li = document.createElement("li");
     li.classList.add("description");
     checks.append(li);
-    li.textContent = `Password  ${elem[0]} status is ${elem[1]}`
+    li.textContent = `${elem.text}}`
 });
 
 
@@ -327,15 +331,26 @@ let description = document.querySelectorAll(".description")
 
 const update = () => {
     let level = getStrength(pw.value).level;
-    let checkStatus = Object.entries(getStrength(pw.value).checks);
-    console.log(getStrength(pw.value).checks)
+    let checkStatus = getStrength(pw.value).checks;
+    let {length,uppercase,number,symbol} = checkStatus
+
+    // updating label   
     label.textContent = level;
     //updating bar style attribute
     bar.dataset.level = level;
 
     // Updating the check status on DOM
-    description.forEach((elem,i) => elem.textContent = `Password ${checkStatus[i][0]} status is ${checkStatus[i][1]}`)
+    description.forEach((elem,i) =>{  
+        //check status updation
+        elem.textContent = `${rules[i].text} --> ${checkStatus[rules[i].key]?"✅":"❌"}` 
+        //update class .met
+        checkStatus[rules[i].key] === true ?elem.classList.add("met"):elem.classList.remove("met") 
+        
+    })
+    
+    let status = checkStatus[rules[0].key]
 }
 
+update()
 pw.addEventListener("input", update)
 
