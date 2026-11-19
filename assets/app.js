@@ -319,7 +319,7 @@ rules.forEach(elem => {
     let li = document.createElement("li");
     li.classList.add("description");
     checks.append(li);
-    li.textContent = `${elem.text}}`
+    // li.textContent = `${elem.text} --> ${checkStatus[rules[i].key]?"✅":"❌"}`
 });
 
 
@@ -330,10 +330,9 @@ let description = document.querySelectorAll(".description")
 // console.log("checks-->",description)
 
 const update = () => {
+
     let level = getStrength(pw.value).level;
     let checkStatus = getStrength(pw.value).checks;
-    let {length,uppercase,number,symbol} = checkStatus
-
     // updating label   
     label.textContent = level;
     //updating bar style attribute
@@ -344,11 +343,12 @@ const update = () => {
         //check status updation
         elem.textContent = `${rules[i].text} --> ${checkStatus[rules[i].key]?"✅":"❌"}` 
         //update class .met
-        checkStatus[rules[i].key] === true ?elem.classList.add("met"):elem.classList.remove("met") 
+
+        // checkStatus[rules[i].key] === true ?elem.classList.add("met"):elem.classList.remove("met") 
+     
+        elem.classList.toggle("met",checkStatus[rules[i].key] === true);
         
     })
-    
-    let status = checkStatus[rules[0].key]
 }
 
 update()
