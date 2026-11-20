@@ -28,8 +28,6 @@
 //  An unknown choice must behave like "system".
 
 
-
-
 const resolve = (choice, osPrefersDark) => {
 
     let options = ["dark","light","system"];
@@ -48,9 +46,48 @@ const resolve = (choice, osPrefersDark) => {
 }
 
 
-console.log(resolve("light", true));    // "light"  (an explicit choice beats the OS)
-console.log(resolve("dark", false));    // "dark"
-console.log(resolve("system", true));   // "dark"
-console.log(resolve("system", false));  // "light"
-console.log(resolve("banana", true));   // "dark"   (unknown acts like system)
-console.log(resolve(null, false));      // "light"
+// console.log(resolve("light", true));    // "light"  (an explicit choice beats the OS)
+// console.log(resolve("dark", false));    // "dark"
+// console.log(resolve("system", true));   // "dark"
+// console.log(resolve("system", false));  // "light"
+// console.log(resolve("banana", true));   // "dark"   (unknown acts like system)
+// console.log(resolve(null, false));      // "light"
+
+
+
+
+
+
+// Stage 2: Draw from state. Keep choice as a variable. 
+// One render() sets data-theme on document.documentElement, 
+// sets aria-pressed on the three buttons (the active one true),
+// and writes a status line like Using system theme (dark). 
+// Your handlers only change choice and call render().
+//  Call it once at the start as well.
+
+let osPrefersDark = false;
+
+let choice = "system"
+
+const render = () => {
+    document.documentElement.dataset.theme = resolve(choice,osPrefersDark)
+
+    //looping over buttons
+
+    let parent = document.querySelector("#choice");
+    console.log(parent.children.length)
+    for(let i = 0;i < parent.children.length; i++){
+        console.log(parent.children[i])
+        if(parent.children[i].dataset.choice === choice) {
+            console.log("inside if")
+            parent.children[i].setAttribute("aria-pressed","true");
+        }
+    }
+    
+    const statusBrief = document.querySelector("#status");
+    
+    statusBrief.textContent = `Using ${choice} theme ${resolve(choice,osPrefersDark)}`; 
+
+}
+
+render()
