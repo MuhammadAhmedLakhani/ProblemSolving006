@@ -69,21 +69,21 @@ const resolve = (choice, osPrefersDark) => {
 // --my initial solution of stage 2
 
 // const render = () => {
-    //     document.documentElement.dataset.theme = resolve(choice,osPrefersDark)
-    
-    //     //looping over buttons
-    
-    //     let parent = document.querySelector("#choice");
-    //     console.log(parent.children.length)
-    //     for(let i = 0;i < parent.children.length; i++){
-        //         console.log(parent.children[i])
-        //         if(parent.children[i].dataset.choice === choice) {
-            //             console.log("inside if")
-            //             parent.children[i].setAttribute("aria-pressed","true");
-            //         }
-            //     }
-            
-            
+//     document.documentElement.dataset.theme = resolve(choice,osPrefersDark)
+
+//     //looping over buttons
+
+//     let parent = document.querySelector("#choice");
+//     console.log(parent.children.length)
+//     for(let i = 0;i < parent.children.length; i++){
+//         console.log(parent.children[i])
+//         if(parent.children[i].dataset.choice === choice) {
+//             console.log("inside if")
+//             parent.children[i].setAttribute("aria-pressed","true");
+//         }
+//     }
+
+
 //     const statusBrief = document.querySelector("#status");
 //     statusBrief.textContent = `Using ${choice} theme ${resolve(choice,osPrefersDark)}`; 
 
@@ -95,7 +95,7 @@ let choice = "system"
 const root = document.documentElement;
 
 const render = () => {
-    
+
     root.dataset.theme = resolve(choice, osPrefersDark);
 
     //setting aria attribute
@@ -107,23 +107,60 @@ const render = () => {
     //setting status
 
     const statusBrief = document.querySelector("#status");
-    
+
     normalStatus = `Using ${choice} theme`
     systemStatus = `Using ${choice} theme (${resolve(choice, osPrefersDark)})`;
-    
-     statusBrief.textContent = (choice === "system"? systemStatus:normalStatus)
+
+    statusBrief.textContent = (choice === "system" ? systemStatus : normalStatus)
 }
 
 // click theme switch
 
 document.querySelectorAll("[data-choice]").forEach(elem => {
-    console.log("setting")
     elem.addEventListener("click", () => {
         choice = elem.dataset.choice;
-        console.log("choice -->", choice)
         render()
     })
 })
 
 
 render()
+
+
+
+
+// ----------------------------------- stage 3 ---------------------------------
+
+// Stage 3: Persistence you can trust. Save the choice under the key theme.
+//  When loading, accept only light, dark, or system, and fall back to system 
+// for anything else, including null. Wrap storage access in try/catch,
+//  because a browser can refuse it and the page must still work. 
+// This is your safeParse instinct again, applied to a plain string.
+
+//saving choice
+
+
+localStorage.setItem("theme", choice);
+
+//accessing storage
+
+
+const safeLoad = () => {
+    try {
+        //get the value from storage
+        let text = localStorage.getItem("theme")
+        let options = ["dark", "light", "system"];
+        // check store value        
+        if (!options.some(elem => text === elem)) {
+            text = "system"
+            console.log("id")
+        }
+        return  text
+    } catch (error) {
+        return  error
+    }
+}
+
+ let storage = safeLoad()
+ console.log(storage);
+console.log("Running normally")
