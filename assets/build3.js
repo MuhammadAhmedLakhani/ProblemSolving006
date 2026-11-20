@@ -30,16 +30,16 @@
 
 const resolve = (choice, osPrefersDark) => {
 
-    let options = ["dark","light","system"];
+    let options = ["dark", "light", "system"];
 
-     if(!(options.find(elem => elem === choice))) {
-        choice ="system"
-     }
+    if (!(options.find(elem => elem === choice))) {
+        choice = "system"
+    }
 
-    if(choice === "light") return "light";
-    if(choice === "dark") return "dark";
-    if(choice === "system") {
-        let result = osPrefersDark?"dark":"light";
+    if (choice === "light") return "light";
+    if (choice === "dark") return "dark";
+    if (choice === "system") {
+        let result = osPrefersDark ? "dark" : "light";
         return result
     }
 
@@ -65,29 +65,65 @@ const resolve = (choice, osPrefersDark) => {
 // Your handlers only change choice and call render().
 //  Call it once at the start as well.
 
+
+// --my initial solution of stage 2
+
+// const render = () => {
+    //     document.documentElement.dataset.theme = resolve(choice,osPrefersDark)
+    
+    //     //looping over buttons
+    
+    //     let parent = document.querySelector("#choice");
+    //     console.log(parent.children.length)
+    //     for(let i = 0;i < parent.children.length; i++){
+        //         console.log(parent.children[i])
+        //         if(parent.children[i].dataset.choice === choice) {
+            //             console.log("inside if")
+            //             parent.children[i].setAttribute("aria-pressed","true");
+            //         }
+            //     }
+            
+            
+//     const statusBrief = document.querySelector("#status");
+//     statusBrief.textContent = `Using ${choice} theme ${resolve(choice,osPrefersDark)}`; 
+
+// }
+
 let osPrefersDark = false;
 
 let choice = "system"
+const root = document.documentElement;
 
 const render = () => {
-    document.documentElement.dataset.theme = resolve(choice,osPrefersDark)
-
-    //looping over buttons
-
-    let parent = document.querySelector("#choice");
-    console.log(parent.children.length)
-    for(let i = 0;i < parent.children.length; i++){
-        console.log(parent.children[i])
-        if(parent.children[i].dataset.choice === choice) {
-            console.log("inside if")
-            parent.children[i].setAttribute("aria-pressed","true");
-        }
-    }
     
+    root.dataset.theme = resolve(choice, osPrefersDark);
+
+    //setting aria attribute
+    document.querySelectorAll("[data-choice]").forEach(elem => {
+        elem.setAttribute("aria-pressed", String(elem.dataset.choice === choice));
+    })
+
+
+    //setting status
+
     const statusBrief = document.querySelector("#status");
     
-    statusBrief.textContent = `Using ${choice} theme ${resolve(choice,osPrefersDark)}`; 
-
+    normalStatus = `Using ${choice} theme`
+    systemStatus = `Using ${choice} theme (${resolve(choice, osPrefersDark)})`;
+    
+     statusBrief.textContent = (choice === "system"? systemStatus:normalStatus)
 }
+
+// click theme switch
+
+document.querySelectorAll("[data-choice]").forEach(elem => {
+    console.log("setting")
+    elem.addEventListener("click", () => {
+        choice = elem.dataset.choice;
+        console.log("choice -->", choice)
+        render()
+    })
+})
+
 
 render()
