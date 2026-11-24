@@ -76,7 +76,7 @@ const resolve = (choice, osPrefersDark) => {
 //     let parent = document.querySelector("#choice");
 //     console.log(parent.children.length)
 //     for(let i = 0;i < parent.children.length; i++){
-//         console.log(parent.children[i])
+    //         console.log(parent.children[i])
 //         if(parent.children[i].dataset.choice === choice) {
 //             console.log("inside if")
 //             parent.children[i].setAttribute("aria-pressed","true");
@@ -89,9 +89,39 @@ const resolve = (choice, osPrefersDark) => {
 
 // }
 
+
+//saving choice
+const saveChoice = (choice) => {
+    try {
+        localStorage.setItem("theme", choice);
+    } catch (error) {
+        return "system"
+    }
+}
+
+//accessing storage
+
+const safeLoad = () => {
+    try {
+        //get the value from storage
+        let text = localStorage.getItem("theme")
+        let options = ["dark", "light", "system"];
+        // check store value        
+        if (!options.some(elem => text === elem)) {
+            text = "system"
+        }
+        return text
+    } catch (error) {
+        return "system"
+    }
+}
+
+
 let osPrefersDark = false;
 
-let choice = "system"
+let choice = safeLoad();
+
+console.log("choice -->",choice)
 const root = document.documentElement;
 
 const render = () => {
@@ -108,20 +138,22 @@ const render = () => {
 
     const statusBrief = document.querySelector("#status");
 
-    normalStatus = `Using ${choice} theme`
-    systemStatus = `Using ${choice} theme (${resolve(choice, osPrefersDark)})`;
+    const normalStatus = `Using ${choice} theme`
+    const systemStatus = `Using ${choice} theme (${resolve(choice, osPrefersDark)})`;
 
     statusBrief.textContent = (choice === "system" ? systemStatus : normalStatus)
-}
+}    
 
-// click theme switch
+
+// click handler theme switch
 
 document.querySelectorAll("[data-choice]").forEach(elem => {
     elem.addEventListener("click", () => {
         choice = elem.dataset.choice;
+        saveChoice(choice)
         render()
-    })
-})
+    })    
+})    
 
 
 render()
@@ -137,30 +169,20 @@ render()
 //  because a browser can refuse it and the page must still work. 
 // This is your safeParse instinct again, applied to a plain string.
 
-//saving choice
 
-
-localStorage.setItem("theme", choice);
-
-//accessing storage
-
-
-const safeLoad = () => {
-    try {
-        //get the value from storage
-        let text = localStorage.getItem("theme")
-        let options = ["dark", "light", "system"];
-        // check store value        
-        if (!options.some(elem => text === elem)) {
-            text = "system"
-            console.log("id")
-        }
-        return  text
-    } catch (error) {
-        return  error
-    }
-}
-
- let storage = safeLoad()
- console.log(storage);
+let storage = safeLoad()
+console.log(storage);
 console.log("Running normally")
+
+localStorage.setItem("theme", "dark");     console.log(safeLoad());   // "dark"
+localStorage.setItem("theme", "light");    console.log(safeLoad());   // "light"
+localStorage.setItem("theme", "system");   console.log(safeLoad());   // "system"
+localStorage.setItem("theme", "banana");   console.log(safeLoad());   // "system"
+localStorage.setItem("theme", "Dark");     console.log(safeLoad());   // your Stage 1 capital-D decision
+localStorage.setItem("theme", "");         console.log(safeLoad());   // "system"
+localStorage.removeItem("theme");          console.log(safeLoad());   // "system"
+
+console.log(typeof safeLoad());                                       // "string", every time
+
+Storage.prototype.getItem = () => { throw new Error("blocked"); };
+console.log(safeLoad());                                              // "system", with no crash
