@@ -76,7 +76,7 @@ const resolve = (choice, osPrefersDark) => {
 //     let parent = document.querySelector("#choice");
 //     console.log(parent.children.length)
 //     for(let i = 0;i < parent.children.length; i++){
-    //         console.log(parent.children[i])
+//         console.log(parent.children[i])
 //         if(parent.children[i].dataset.choice === choice) {
 //             console.log("inside if")
 //             parent.children[i].setAttribute("aria-pressed","true");
@@ -116,12 +116,13 @@ const safeLoad = () => {
     }
 }
 
+//loading user preference from the global object
 
-let osPrefersDark = false;
+let preferenceObject = window.matchMedia("(prefers-color-scheme:dark)");
+let osPrefersDark = preferenceObject.matches
 
 let choice = safeLoad();
 
-console.log("choice -->",choice)
 const root = document.documentElement;
 
 const render = () => {
@@ -142,7 +143,7 @@ const render = () => {
     const systemStatus = `Using ${choice} theme (${resolve(choice, osPrefersDark)})`;
 
     statusBrief.textContent = (choice === "system" ? systemStatus : normalStatus)
-}    
+}
 
 
 // click handler theme switch
@@ -152,8 +153,17 @@ document.querySelectorAll("[data-choice]").forEach(elem => {
         choice = elem.dataset.choice;
         saveChoice(choice)
         render()
-    })    
-})    
+    })
+})
+
+// ospreference handler event
+
+preferenceObject.addEventListener("change", () => {
+
+    //updating change
+    osPrefersDark = preferenceObject.matches
+    render()
+})
 
 
 render()
@@ -169,20 +179,15 @@ render()
 //  because a browser can refuse it and the page must still work. 
 // This is your safeParse instinct again, applied to a plain string.
 
+// localStorage.setItem("theme", "dark"); console.log(safeLoad());   // "dark"
+// localStorage.setItem("theme", "light"); console.log(safeLoad());   // "light"
+// localStorage.setItem("theme", "system"); console.log(safeLoad());   // "system"
+// localStorage.setItem("theme", "banana"); console.log(safeLoad());   // "system"
+// localStorage.setItem("theme", "Dark"); console.log(safeLoad());   // your Stage 1 capital-D decision
+// localStorage.setItem("theme", ""); console.log(safeLoad());   // "system"
+// localStorage.removeItem("theme"); console.log(safeLoad());   // "system"
 
-let storage = safeLoad()
-console.log(storage);
-console.log("Running normally")
+// console.log(typeof safeLoad());                                       // "string", every time
 
-localStorage.setItem("theme", "dark");     console.log(safeLoad());   // "dark"
-localStorage.setItem("theme", "light");    console.log(safeLoad());   // "light"
-localStorage.setItem("theme", "system");   console.log(safeLoad());   // "system"
-localStorage.setItem("theme", "banana");   console.log(safeLoad());   // "system"
-localStorage.setItem("theme", "Dark");     console.log(safeLoad());   // your Stage 1 capital-D decision
-localStorage.setItem("theme", "");         console.log(safeLoad());   // "system"
-localStorage.removeItem("theme");          console.log(safeLoad());   // "system"
-
-console.log(typeof safeLoad());                                       // "string", every time
-
-Storage.prototype.getItem = () => { throw new Error("blocked"); };
-console.log(safeLoad());                                              // "system", with no crash
+// Storage.prototype.getItem = () => { throw new Error("blocked"); };
+// console.log(safeLoad());                                              // "system", with no crash

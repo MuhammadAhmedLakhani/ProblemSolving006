@@ -38,6 +38,23 @@
             outline: 2px solid currentColor;
         }
     </style>
+    <script>
+        try {
+            let text = localStorage.getItem("theme")
+            console.log(text)
+            let options = ["dark", "light"];
+            // check store value        
+            if (!options.some(elem => text === elem)) {
+                text = "system"
+            }
+            if (text === "system") {
+                let text = osPrefersDark ? "dark" : "light";
+            }
+            document.documentElement.dataset.theme = text;
+        } catch (e) {
+            document.documentElement.dataset.theme = text;   // a safe default if storage fails
+        }
+    </script>
 </head>
 
 <body>
@@ -53,7 +70,7 @@
     </div>
 
 
-    <script src="assets/build3.js" defer></script>
+    <!-- <script src="assets/build3.js" defer></script> -->
 </body>
 
 </html>
