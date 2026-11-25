@@ -39,21 +39,20 @@
         }
     </style>
     <script>
-        try {
-            let text = localStorage.getItem("theme")
-            console.log(text)
-            let options = ["dark", "light"];
-            // check store value        
-            if (!options.some(elem => text === elem)) {
-                text = "system"
+        (() => {
+            const osPrefersDark = window.matchMedia("(prefers-color-scheme:dark)").matches
+            let text = "system"
+            try {
+                let saved = localStorage.getItem("theme")
+                // check store value        
+                if (saved === "dark" || saved === "light") text = saved;
             }
+            catch (e) { }
             if (text === "system") {
-                let text = osPrefersDark ? "dark" : "light";
+                text = osPrefersDark ? "dark" : "light";
             }
             document.documentElement.dataset.theme = text;
-        } catch (e) {
-            document.documentElement.dataset.theme = text;   // a safe default if storage fails
-        }
+        })()
     </script>
 </head>
 
@@ -70,7 +69,7 @@
     </div>
 
 
-    <!-- <script src="assets/build3.js" defer></script> -->
+    <script src="assets/build3.js" defer></script>
 </body>
 
 </html>
